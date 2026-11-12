@@ -1,45 +1,29 @@
-# Bay cùng nhau — Prototype LAB5 / T3
+# Prototype T3 — Bay cùng nhau
 
-Mở trực tiếp **[index.html](index.html)** bằng Edge, Chrome hoặc Firefox. HTML chứa toàn bộ CSS, JavaScript và icon SVG; không cần cài thư viện, mạng, tài khoản hay API key.
+Mở trực tiếp [index.html](index.html) bằng trình duyệt. File chạy cục bộ, không cần cài đặt, đăng nhập, API key, backend hoặc AI thật. Chuyến bay, hành khách, hãng Bay Mẫu và mọi kết quả là dữ liệu dựng.
 
-Đây là mô phỏng xác định theo kịch bản, không có AI hoặc backend thật. Chính sách Bay Mẫu và mọi kết quả thao tác đều là dữ liệu dựng. Thông tin và nhật ký chỉ tồn tại trong phiên; tải lại trang sẽ đặt lại dữ liệu.
+## Ba ca và ba mức
 
-## Demo ca chính
+Chọn **S03**, **S07** hoặc **S04** ở đầu trang. Mức **2 · Khách xác nhận** là lựa chọn chính thức của nhóm và mặc định. Mức 1 và 3 chỉ dùng so sánh; chuyển ca hoặc mức đặt lại phiên và thông báo trạng thái cũ đã xóa.
 
-1. Chọn `S03 · Hai mẹ con cần bay tối nay`. Chuyến BM 217 chỉ có một chỗ nên không cho đổi hai người hoặc tách hành khách.
-2. Chọn `07:00 cho cả hai` hoặc `09:30 cho cả hai`: hành động này chấp nhận ngày 13/11 và giữ hai chỗ trong 20 phút, chưa đổi vé.
-3. Bấm `Xem lại để đổi`. Kiểm tra ngày, giờ, tên hai người, phí 0 ₫ và việc dùng lần đổi miễn phí duy nhất.
-4. Tự tích ô đồng ý, rồi bấm nút xác nhận ghi rõ chuyến và hai hành khách. Kết quả chỉ xuất hiện sau phản hồi mô phỏng.
-5. Dùng `Báo thông tin không đúng` để gửi hồ sơ; có thể bổ sung ghi chú. Không có chức năng tự hoàn tác vé đã đổi.
+- **Mức 1:** AI chỉ gợi ý; không giữ chỗ, đổi chuyến hay gửi hoàn. Khách cần tự xử lý hoặc nhờ nhân viên.
+- **Mức 2:** AI được giữ chỗ ở S03 sau khi khách chọn rõ chuyến đủ chỗ; việc đổi vé chờ khách xác nhận. Ở S07, gửi hoàn bị khóa vì thiếu thông tin. Ở S04, trợ lý không tự xử lý trẻ bay một mình.
+- **Mức 3:** phương án bị loại. Màn hình trình bày hậu quả giả định của việc tự đổi hoặc tự gửi hoàn; không thực hiện giao dịch. S04 vẫn không tự đổi riêng vé trẻ ở bất kỳ mức nào.
 
-Trước khi đổi, có thể hủy giữ chỗ hoặc chọn chuyến khác. Khi đổi phương án, phải xác nhận nhả chỗ cũ trước khi giữ chỗ mới; không giữ đồng thời nhiều chuyến.
+## Bấm demo
 
-## Các ca còn lại
+1. **S03:** đọc lý do một chỗ không đủ cho hai người → chọn BM 201 hoặc BM 205 cho cả hai → thấy đã giữ 20 phút nhưng chưa đổi → bấm xem lại → kiểm tra chuyến, hai hành khách và hậu quả → tích xác nhận rồi bấm đổi. Có thể hủy giữ hoặc sửa lựa chọn; chuyển sang chuyến khác cần xác nhận nhả chỗ cũ. Hết hạn thì chọn lại.
+2. **S07:** bấm xem trước hoàn → thấy số tiền, nơi nhận và thời gian chưa xác minh, cảnh báo không rút được và nút gửi bị khóa → bấm gặp nhân viên để gửi hồ sơ mô phỏng. Chưa gửi yêu cầu hoàn.
+3. **S04:** đọc giới hạn trẻ 5 tuổi bay một mình → bấm gặp nhân viên → thấy trạng thái đang gửi và hệ thống hỗ trợ mô phỏng đã nhận. S04 là ca lạ **để luyện tập**; ca lạ trong buổi demo do người xem đưa và có thể khác.
 
-| Ca | Cách thử / hành vi cần thấy |
-|---|---|
-| N01 | Tự giữ BM 201 theo ý định đã rõ, vẫn cần người dùng duyệt đổi. |
-| S02 | “Ừ đổi đi” không tự giữ hoặc đổi. Phải chọn chuyến và xem bản duyệt. |
-| S07 | Bấm `Xem trước hoàn cho cả hai`. Số tiền, nơi nhận và thời gian chưa xác minh; nút gửi bị khóa. Hồ sơ xác minh được chuyển, yêu cầu hoàn chưa được gửi. |
-| S09 | Lỗi cũ được khởi tạo sẵn: chỉ vé Bình đã đổi. Hiện trạng thái từng người, khóa đổi/hoàn mới, chuyển hồ sơ. |
-| S08 | Lỗi cũ được khởi tạo sẵn: hoàn đã gửi lúc 15:04. Hiện biên nhận, không có nút rút hoàn hoặc khôi phục vé. |
-| S06 | Giữ chỗ, bấm xem lại. Đồng hồ mô phỏng tiến 21 phút, hết hạn và khóa duyệt cũ. Tra cứu lại, chọn và duyệt mới. |
-| S05 | Giữ chỗ, xem lại và duyệt. Khi kiểm tra trước thực thi, chuyến đã chọn chỉ còn một chỗ; từ chối cả nhóm, không tiêu quyền đổi. |
-| Timeout | Sau duyệt, chưa rõ kết quả và khóa thao tác xung đột. Bấm `Kiểm tra trạng thái thao tác` để đọc lịch sử; không gọi đổi lần nữa. |
-| Lỗi tra cứu | Không hiện dữ liệu chưa xác minh; bấm thử tra cứu lại. |
-| Lỗi chuyển hồ sơ | Bấm nhờ nhân viên: lần gửi đầu thất bại. Ghi chú được giữ khi thử lại. Không báo đã gửi trước khi có phản hồi. |
+Ô **Hiện chú thích HAX/PAIR** bật hoặc tắt cả số trên giao diện và bảng giải thích. Khi bật, bảng chỉ hiện số của trạng thái đang xem. Ảnh minh họa: [S03 xác nhận](01-s03-xac-nhan.png), [S07 hoàn vé](02-s07-hoan-ve.png).
 
-Chat hỗ trợ một số câu theo fixture (hỏi giờ bay, bồi thường, trẻ bay một mình, đổi tên, yêu cầu vượt xác nhận). Câu ngoài kịch bản sẽ được hỏi rõ hoặc chuyển hỗ trợ; không tự sinh dữ liệu chuyến bay. Chat không thay nút phê duyệt giao dịch.
+Bảng công cụ giữ tên đầy đủ; trên màn hình hẹp, đưa focus vào bảng bằng phím Tab rồi dùng phím mũi tên để cuộn ngang. Đổi ca hoặc mức vẫn đặt lại phiên ngay và thông báo trạng thái cũ đã xóa.
 
-`Đặt lại` hoặc thay bộ chọn ca sẽ bắt đầu một phiên mới. Các ca lỗi lịch sử được gắn nhãn riêng; luồng bình thường không tạo lỗi bằng cách bỏ qua rào chắn.
+## Phạm vi kiểm tra
 
-## Ảnh và kiểm chứng
+Đã kiểm tra bằng Edge/Playwright ở 360, 390, 768, 860, 1024 và 1440 px sau chỉnh UI: S03 giữ chỗ, khóa duyệt trước khi tích và đổi sau xác nhận; S07 khóa gửi; S04 không có nút đổi riêng trẻ ở ba mức; chuyển hỗ trợ; giữ chỗ hết hạn mô phỏng; chuyển ca/mức; ẩn/hiện chú thích và cuộn bảng bằng bàn phím; focus trở về vùng hội thoại khi chuyển trạng thái. Không phát hiện tràn ngang toàn trang hoặc lỗi JavaScript trong các lượt này. Bảng cuộn ngang cục bộ khi không đủ chỗ. Kết quả cũ của phiên bản trước không được sử dụng.
 
-- [Ảnh 1 — chọn phương án, các điểm 1–3](01-chon-phuong-an.png).
-- [Ảnh 2 — xác nhận đổi, điểm 4](02-xac-nhan-doi.png). Điểm 5 và 6 được kiểm tra bằng tương tác qua bộ chọn ca và kết quả/hồ sơ hỗ trợ.
-- [Ảnh giao diện điện thoại](03-mobile.png).
-- [Kết quả 24 kiểm tra trình duyệt](verification.json): Microsoft Edge 157 với Playwright, chạy cả HTTP cục bộ và mở HTML trực tiếp; kiểm tra chiều rộng 1440, 1024, 768, 390 và 360 px.
+Kiểm tra bổ sung ở 390 và 1440 px: chuyển đủ ba mức trong từng ca S03/S07/S04; hai mức so sánh không hiển thị nút thực hiện giao dịch.
 
-P1: chặn giao dịch thiếu quyền/duyệt, xử lý cả nhóm và không gửi lặp. P2: trạng thái khớp dữ liệu và phản hồi mô phỏng, phân biệt kết quả chưa rõ. P3: sửa/hủy giữ chỗ, gửi hồ sơ và thử lại đúng khả năng. Các kiểm tra đã chạy đều đạt; chưa demo với TA, chưa kiểm chứng API hay sản phẩm thực tế.
-
-Nếu cần chạy qua HTTP, tại thư mục này dùng `python -m http.server 5173 --bind 127.0.0.1`, rồi mở `http://127.0.0.1:5173`. Mở trực tiếp file vẫn là cách mặc định.
+Giới hạn: đây là kịch bản cố định, không nhận câu hỏi tự do; không mô phỏng S08/S09, thay đổi chỗ thực tế, lỗi gửi hồ sơ hoặc timeout. Chưa demo với TA, chưa kiểm chứng sản phẩm thật; không có dữ liệu hoàn đầy đủ để thực hiện gửi hoàn thành công.
