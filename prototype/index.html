@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#163d36">
+  <meta name="description" content="Prototype trợ lý đổi chuyến: tìm phương án, giữ chỗ và xác nhận trước khi đổi. Dữ liệu mô phỏng của nhóm BunRieuTopMo.">
+  <title>Bay cùng nhau — Trợ lý hành trình</title>
+  <style>
+    :root{--bg:#f5f6f3;--paper:#fff;--ink:#203b35;--muted:#6e7b75;--green:#245d4b;--pale:#eaf2eb;--line:#e1e7df;--amber:#96601d;--amber-bg:#fcf3e5;--red:#a04437;--red-bg:#fbefeb;--shadow:0 10px 34px #203b3507;--radius:18px}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "Segoe UI",Arial,sans-serif}button,input,select,textarea{font:inherit}button,select{cursor:pointer}button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:9px;min-height:42px;padding:10px 16px;font-weight:600;background:var(--green);color:white;transition:background .18s,transform .18s}button:hover:not(:disabled){background:#194535;transform:translateY(-1px)}button:disabled{cursor:not-allowed;opacity:.48}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #d79637;outline-offset:4px}a{color:var(--green)}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}h1,h2,h3,p{margin:0}h1{font-size:31px;letter-spacing:-1.1px;line-height:1.3;font-weight:650}h2{font-size:19px;letter-spacing:-.45px}h3{font-size:15px}small,.small{font-size:12px}.muted{color:var(--muted)}.eyebrow{font-size:10px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase}.icon-button{padding:9px;min-width:40px}.secondary{background:white;border-color:var(--line);color:var(--ink)}.secondary:hover:not(:disabled){background:var(--pale)}.text-button{background:transparent;color:var(--green);padding:7px 0;min-height:32px}.text-button:hover:not(:disabled){background:transparent;text-decoration:underline;transform:none}.danger-button{background:white;color:var(--red);border-color:#eddbd4}.danger-button:hover:not(:disabled){background:var(--red-bg)}.pill{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:11px;padding:4px 9px;border-radius:6px;font-weight:650;background:var(--pale);color:var(--green)}.pill.amber{background:var(--amber-bg);color:var(--amber)}.pill.red{background:var(--red-bg);color:var(--red)}.dot{width:6px;height:6px;border-radius:50%;background:currentColor}.number{display:inline-flex;align-items:center;justify-content:center;font-size:10px;line-height:1;width:19px;height:19px;border-radius:5px;color:var(--green);background:#e9efe7;font-weight:700;vertical-align:middle;margin-right:7px}.rule{border:0;border-top:1px solid var(--line);margin:20px 0}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.stack{display:grid;gap:14px}.full{width:100%}.nowrap{white-space:nowrap}[hidden]{display:none!important}
+    .app{display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:#fdfdf9;border-right:1px solid var(--line);padding:34px 21px 22px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:11px;margin-bottom:47px}.brand-mark{display:grid;place-items:center;width:36px;height:39px;background:var(--green);border-radius:11px 11px 11px 3px;color:#fff;transform:rotate(-7deg)}.brand-mark svg{width:23px;height:23px;transform:rotate(7deg)}.brand-name{font-size:19px;letter-spacing:-.7px;font-weight:750}.brand-sub{font-size:9px;letter-spacing:2.3px;color:var(--muted)}.nav-label{padding-left:13px;font-size:10px;letter-spacing:1.5px;color:#8a948c;font-weight:650;margin-bottom:13px}.nav-item{display:flex;gap:12px;align-items:center;text-decoration:none;padding:12px 13px;border-radius:9px;color:var(--muted);margin-bottom:7px;font-size:13px}.nav-item.active{background:#e9eee4;color:var(--green);font-weight:650}.nav-item svg{width:18px;height:18px}.nav-count{margin-left:auto;background:white;font-size:10px;padding:0 6px;border-radius:4px}.sidebar-note{margin-top:auto;padding:17px 13px;background:#f1f3ec;border-radius:12px}.sidebar-note p{font-size:12px;color:var(--muted);margin-top:6px}.sidebar-note svg{color:var(--green)}.profile{margin-top:22px;padding:16px 4px 0;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{display:grid;place-items:center;background:#e7ece2;color:var(--green);width:34px;height:34px;border-radius:50%;font-size:11px;font-weight:700}.profile p{font-size:12px;font-weight:600}.profile small{font-size:10px;color:var(--muted)}.main{min-width:0}.topbar{height:77px;border-bottom:1px solid var(--line);background:#ffffffa3;display:flex;align-items:center;justify-content:space-between;padding:0 42px}.breadcrumbs{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}.breadcrumbs b{font-weight:600;color:var(--ink)}.topbar-right{display:flex;align-items:center;gap:20px}.simulation{display:flex;align-items:center;gap:7px;font-size:11px;color:#82602b}.simulation .dot{background:#c7954b}.topbar-right .help-button{font-size:12px;min-height:32px}.content{max-width:1390px;padding:32px 42px 24px;margin:auto}.page-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px;gap:16px}.page-heading .eyebrow{color:var(--green);margin-bottom:9px}.page-heading p{margin-top:8px;font-size:13px;color:var(--muted)}.heading-stamp{text-align:right;flex-shrink:0}.heading-stamp .date{font-size:12px;font-weight:600}.heading-stamp .time{font-size:11px;color:var(--muted);margin-top:4px}.demo-bar{display:flex;align-items:center;gap:12px;padding:10px 13px;background:#eaece5;border:1px solid #dfe3d9;border-radius:10px;margin-bottom:23px}.demo-bar label{font-size:10px;letter-spacing:1px;font-weight:700;white-space:nowrap}.demo-bar select{background:transparent;border:0;min-height:30px;color:var(--ink);font-size:12px;flex:1;min-width:0}.demo-bar button{font-size:11px;min-height:30px;padding:4px 9px;background:transparent;border-color:#d2d9cd;color:var(--ink)}.demo-bar button svg{width:13px;height:13px}.steps{display:flex;align-items:center;margin:0 0 22px;gap:12px;font-size:12px;color:#8c958d}.step{display:flex;align-items:center;gap:8px}.step-circle{height:23px;width:23px;border:1px solid #cfd7cd;border-radius:50%;display:grid;place-items:center;font-size:10px}.step.active{color:var(--green);font-weight:600}.step.active .step-circle{background:var(--green);color:white;border-color:var(--green)}.step-line{width:44px;height:1px;background:#d7ded3}.work-area{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:23px;align-items:start}.primary-column{min-width:0}.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.booking{padding:23px 25px;position:relative;overflow:hidden}.booking-top{margin-bottom:22px}.booking-ref{font-size:11px;color:var(--muted)}.booking-ref strong{letter-spacing:1px;color:var(--ink);margin-left:7px;font-size:12px}.route{display:flex;align-items:center;justify-content:space-between;gap:16px}.airport-code{font-size:32px;font-weight:650;letter-spacing:-1px;line-height:1.2}.airport-name{font-size:11px;color:var(--muted);margin-top:3px}.route-end{text-align:right}.route-middle{text-align:center;flex:1;padding:0 7px}.route-track{display:flex;align-items:center;gap:8px;color:#8eaa96}.route-track:before,.route-track:after{content:"";height:1px;background:repeating-linear-gradient(90deg,#bacbbc 0 4px,transparent 4px 8px);flex:1}.route-track svg{width:20px;height:20px;transform:rotate(45deg)}.route-middle small{font-size:9px;letter-spacing:.3px;color:var(--muted)}.original-flight{display:flex;align-items:center;gap:10px;margin-top:22px;font-size:11px;flex-wrap:wrap}.airline-icon{display:grid;place-items:center;width:24px;height:24px;background:var(--pale);border-radius:6px;color:var(--green)}.airline-icon svg{height:15px;width:15px}.original-time{text-decoration:line-through;color:#7c857c}.cancellation{margin-top:15px;padding:9px 11px;border-radius:7px;background:var(--red-bg);font-size:11px;color:#955345;display:flex;align-items:flex-start;gap:8px}.cancellation svg{width:15px;height:15px;margin-top:2px}.passengers{border-top:1px dashed #dce2d8;margin-top:18px;padding-top:15px;display:flex;gap:20px;flex-wrap:wrap;font-size:11px}.passengers svg{height:14px;width:14px;color:#7f8d7b}.source{font-size:10px;color:#8a9388;margin-top:13px}.assistant{margin-top:20px;overflow:hidden}.assistant-header{padding:18px 23px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.assistant-id{display:flex;gap:10px;align-items:center}.assistant-avatar{display:grid;place-items:center;width:33px;height:33px;background:var(--green);color:white;border-radius:10px}.assistant-id h2{font-size:14px;letter-spacing:0}.assistant-id small{font-size:10px;color:var(--muted)}.assistant-header>.pill{font-size:9px;padding:3px 7px}.conversation{padding:22px 23px 8px}.message{margin-bottom:17px;animation:appear .25s ease}.message.user{margin-left:38px;text-align:right}.message.user .bubble{background:#f0f2ec;color:#53614f;display:inline-block;border-radius:13px 13px 3px 13px;padding:11px 14px;font-size:12px;text-align:left}.message.assistant .bubble{font-size:13px;line-height:1.85;color:#4e5e53}.message-label{font-size:9px;letter-spacing:.6px;font-weight:650;color:#9a9f96;margin-bottom:7px}.message.assistant .message-label{color:var(--green)}.message .bubble strong{color:var(--ink);font-weight:650}.insight{display:flex;gap:9px;padding:11px 12px;margin-top:12px;background:var(--amber-bg);border:1px solid #f2e2c7;border-radius:8px;font-size:11px;color:#89632d}.insight svg{height:16px;width:16px;margin-top:2px}.quick-actions{display:flex;gap:7px;flex-wrap:wrap;padding:5px 23px 19px}.quick-actions button{min-height:33px;font-size:10px;padding:6px 10px;border-radius:7px}.composer{border-top:1px solid var(--line);padding:15px 19px}.composer form{display:flex;align-items:center;gap:9px;padding:4px 5px 4px 12px;border:1px solid #dfe5db;border-radius:10px;background:#fdfefa}.composer input{border:0;background:transparent;min-width:0;flex:1;outline:none;padding:7px 0;font-size:12px;color:var(--ink)}.composer button{min-height:32px;width:33px;padding:7px;border-radius:7px}.composer button svg{width:15px;height:15px}.composer p{font-size:9px;margin-top:8px;color:#91988e}.section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.section-heading h2{font-size:15px}.section-heading small{font-size:10px}.alternatives{padding:20px}.alternatives .section-heading{margin-bottom:4px}.alternatives-intro{font-size:11px;color:var(--muted);margin-bottom:16px}.day-label{font-size:10px;font-weight:600;color:#879180;display:flex;align-items:center;gap:9px;margin:15px 0 10px}.day-label:after{content:"";height:1px;background:var(--line);flex:1}.flight-card{border:1px solid var(--line);border-radius:11px;padding:15px;margin-bottom:10px;position:relative}.flight-card.unavailable{background:#fafaf7;border-style:dashed}.flight-card.recommended{border-color:#b4c7ae;background:#fcfdf9}.flight-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:10px}.flight-top b{font-size:11px;font-weight:600}.flight-times{display:flex;align-items:center;gap:12px}.flight-time{font-size:23px;font-weight:600;letter-spacing:-.5px;line-height:1.25}.flight-airport{font-size:9px;letter-spacing:1px;color:#94a08d;margin-top:3px}.flight-route{display:flex;align-items:center;gap:7px;flex:1;color:#aab5a2}.flight-route:before,.flight-route:after{content:"";flex:1;height:1px;background:#d9e1d2}.flight-route svg{width:16px;height:16px;transform:rotate(45deg)}.flight-meta{display:flex;justify-content:space-between;margin-top:12px;font-size:10px;color:var(--muted)}.flight-action{width:100%;font-size:11px;min-height:34px;margin-top:13px}.flight-blocked{font-size:10px;color:var(--amber);background:var(--amber-bg);border-radius:5px;padding:7px 8px;margin-top:10px;line-height:1.5}.flight-card .pill{font-size:9px;padding:3px 6px}.availability-note{font-size:9px;color:#8e9888;display:flex;gap:6px;margin-top:15px}.availability-note svg{width:13px;height:13px;margin-top:2px}.support-card{margin-top:17px;padding:19px 20px;background:#edf0e8;border:1px solid #dfe5d8;border-radius:12px}.support-card h3{font-size:12px}.support-card p{font-size:11px;color:var(--muted);margin:6px 0}.support-card button{font-size:11px;min-height:30px}.support-card .row{align-items:flex-start}.support-card svg{color:#7a9074}.page-footer{display:flex;justify-content:space-between;gap:15px;margin-top:27px;font-size:10px;color:#929a8d}.footer-promise{display:flex;align-items:center;gap:7px}.footer-promise svg{width:13px;height:13px}.hold-card{margin-top:17px;padding:18px 21px;border:1px solid #b6cbb0;background:#f1f6eb;border-radius:12px}.hold-card h3{font-size:13px}.countdown{font-variant-numeric:tabular-nums;font-size:21px;font-weight:600;letter-spacing:1px;color:var(--green)}.hold-card p{font-size:11px;color:#66745c;margin:7px 0 12px}.hold-actions{display:flex;gap:13px;align-items:center}.hold-actions button{font-size:11px}.hold-card.expired{background:var(--amber-bg);border-color:#e5cfae}.review-panel{padding:25px}.review-heading{display:flex;gap:12px;align-items:center;margin-bottom:23px}.review-heading>svg{width:38px;height:38px;padding:9px;border-radius:11px;color:var(--green);background:var(--pale)}.review-heading h2{font-size:20px}.review-heading p{font-size:11px;color:var(--muted);margin-top:3px}.review-route{display:flex;align-items:flex-start;gap:12px;padding:17px;background:#f5f7f2;border-radius:10px}.review-route>.airline-icon{margin-top:3px}.review-route h3{font-size:13px}.review-route p{font-size:12px;margin-top:4px}.detail-list{margin:20px 0;display:grid;gap:13px}.detail-row{display:flex;justify-content:space-between;gap:15px;font-size:12px}.detail-row>span:first-child{color:var(--muted)}.detail-row>span:last-child{text-align:right}.detail-row .unknown{color:var(--amber);font-weight:600}.notice{border-radius:9px;padding:13px 15px;font-size:12px;display:flex;align-items:flex-start;gap:10px;background:var(--amber-bg);color:#8d632b;margin:16px 0}.notice svg{width:18px;height:18px;margin-top:2px}.notice p+p{margin-top:5px}.notice.success{background:var(--pale);color:var(--green)}.notice.error{background:var(--red-bg);color:var(--red)}.consent{display:flex;align-items:flex-start;gap:10px;font-size:12px;margin:20px 0;cursor:pointer}.consent input{margin-top:4px;accent-color:var(--green);width:17px;height:17px;flex-shrink:0}.review-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.review-controls>button{font-size:12px}.review-controls>.primary{flex:1}.review-info{font-size:10px;color:var(--muted);margin-top:12px}.context-panel{padding:23px}.context-panel h3{font-size:13px}.context-panel p{font-size:12px;color:var(--muted);margin-top:8px}.permission-row{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:11px}.permission-row svg{width:17px;height:17px;color:var(--green)}.permission-row span{flex:1}.permission-row small{font-size:9px;color:var(--green);background:var(--pale);padding:2px 6px;border-radius:4px}.permission-row small.manual{color:var(--amber);background:var(--amber-bg)}.result-person{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}.result-person small{display:block;font-size:10px;color:var(--muted)}.support-case{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}.support-case h3{font-size:13px}.support-case p{font-size:11px;margin-top:7px;color:var(--muted)}textarea{width:100%;border:1px solid var(--line);border-radius:8px;margin:10px 0;padding:10px;resize:vertical;min-height:65px;color:var(--ink);background:#fcfdf9;font-size:12px}.case-state{font-size:11px;border-radius:8px;background:var(--pale);padding:11px 13px;margin-top:12px;color:var(--green)}.case-state.failed{background:var(--red-bg);color:var(--red)}.busy-panel{padding:45px 25px;text-align:center}.spinner{display:block;margin:0 auto 15px;width:26px;height:26px;border:2px solid #dfe8da;border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}.busy-panel p{color:var(--muted);font-size:12px;margin-top:6px}.receipt-ref{font-size:10px;color:var(--muted);letter-spacing:.6px;margin-bottom:20px}.dev-details{margin-top:22px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:10px}.dev-details summary{cursor:pointer;display:list-item}.log-list{max-height:180px;overflow:auto;margin-top:10px;font:10px/1.8 Consolas,monospace;overflow-wrap:anywhere}.log-entry{border-bottom:1px solid var(--line);padding:5px 0}.toast{position:fixed;bottom:24px;left:calc(50% + 100px);transform:translateX(-50%);background:var(--ink);color:white;padding:12px 20px;border-radius:10px;box-shadow:0 4px 20px #0002;z-index:10;font-size:12px;max-width:calc(100vw - 30px);text-align:center}.mobile-brand{display:none}.empty-note{padding:20px;font-size:12px;color:var(--muted)}@keyframes spin{to{transform:rotate(360deg)}}@keyframes appear{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    .brand-sub{font-size:8px;letter-spacing:1.25px;white-space:nowrap}.source,.availability-note,.composer p,.flight-airport{font-size:10px;color:#6e7b65}.page-footer{color:#707c68}.message-label{color:#74806f}.assistant-id small{font-size:11px}.simulation{color:#795b29}
+    @media(min-width:1500px){.content{padding-top:40px}.work-area{gap:28px}.booking{padding:28px}.conversation{padding:25px 27px 8px}.assistant-header{padding:20px 27px}.flight-card{padding:18px}.alternatives{padding:23px}.flight-time{font-size:26px}.flight-action{min-height:38px}}
+    @media(max-width:1150px){.app{grid-template-columns:190px minmax(0,1fr)}.sidebar{padding:29px 14px 20px}.brand-name{font-size:17px}.brand-sub{font-size:8px}.content{padding:27px 26px 20px}.topbar{padding:0 26px}.work-area{grid-template-columns:minmax(0,1.3fr) minmax(280px,1fr);gap:17px}h1{font-size:27px}.booking{padding:20px}.passengers{gap:8px}.assistant-header{padding:16px}.conversation{padding:18px 16px 6px}.quick-actions{padding:5px 16px 15px}.heading-stamp{display:none}}
+    @media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-brand{display:flex;align-items:center;gap:7px;font-weight:700;font-size:14px}.mobile-brand svg{width:18px;height:18px}.topbar{height:65px}.breadcrumbs{display:none}.content{padding:25px}.work-area{grid-template-columns:minmax(0,1.3fr) minmax(270px,1fr)}.toast{left:50%}.topbar-right{gap:12px}}
+    @media(max-width:660px){body{font-size:13px}.topbar{padding:0 18px}.simulation{font-size:9px}.topbar-right .help-button{display:none}.content{padding:22px 16px}.page-heading{margin-bottom:20px}h1{font-size:28px;max-width:280px}.page-heading p{font-size:12px;max-width:310px}.work-area{grid-template-columns:1fr;gap:18px}.demo-bar{gap:7px;padding:8px}.demo-bar label{font-size:8px}.demo-bar select{font-size:10px}.demo-bar button{font-size:10px}.steps{font-size:10px;gap:8px}.step-line{width:20px}.booking{padding:20px}.passengers{gap:13px}.airport-code{font-size:32px}.flight-card{padding:17px}.flight-time{font-size:26px}.flight-action{min-height:40px}.alternatives{padding:20px}.page-footer{flex-direction:column;gap:8px}.review-panel{padding:20px}.detail-row{font-size:11px}.review-controls{flex-direction:column;align-items:stretch}.review-controls>button{width:100%}.message.user{margin-left:20px}.context-panel{padding:20px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="14" rx="3"/><path d="M9 7V4h6v3M8 11v6m8-6v6"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m16 8-3 5-5 3 3-5Z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11a9 9 0 0 1-9 9H4l-2 2V11a9 9 0 0 1 19 0Z"/><path d="M7 10h10M7 14h6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 7a7 7 0 0 1 12-2l2 3M4 16l2 3a7 7 0 0 0 12-2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.7 6.3L21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7ZM20 2v4m-2-2h4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m5-5-5 5 5 5"/></symbol>
+  </svg>
+  <div class="app">
+    <aside class="sidebar" aria-label="Thanh bên">
+      <div class="brand"><div class="brand-mark"><svg><use href="#i-plane"/></svg></div><div><div class="brand-name">bay cùng nhau<span style="color:#aab19e">.</span></div><div class="brand-sub">AN TÂM MỖI HÀNH TRÌNH</div></div></div>
+      <div class="nav-label">HÀNH TRÌNH CỦA BẠN</div>
+      <nav aria-label="Điều hướng"><a class="nav-item active" href="#booking"><svg><use href="#i-bag"/></svg>Đặt chỗ của tôi<span class="nav-count">1</span></a><a class="nav-item" href="#assistant"><svg><use href="#i-spark"/></svg>Trợ lý hành trình</a><a class="nav-item" href="#support"><svg><use href="#i-chat"/></svg>Trung tâm hỗ trợ</a></nav>
+      <div class="sidebar-note"><svg><use href="#i-shield"/></svg><h3 style="font-size:12px;margin-top:7px">Bạn luôn là người quyết định.</h3><p>Trợ lý tìm và giữ chỗ.<br>Bạn xác nhận trước khi đổi vé.</p></div>
+      <div class="profile"><div class="avatar">MA</div><div><p>Nguyễn Minh An</p><small>Đại diện đặt chỗ · Mô phỏng</small></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="mobile-brand"><svg><use href="#i-plane"/></svg>bay cùng nhau.</div><div class="breadcrumbs">Đặt chỗ của tôi <span>›</span> <b>Hỗ trợ đổi chuyến</b></div><div class="topbar-right"><span class="simulation"><span class="dot"></span>Mô phỏng — dữ liệu dựng</span><button class="help-button text-button" data-action="support"><svg><use href="#i-chat"/></svg>Hỗ trợ</button></div></header>
+      <div class="content">
+        <div class="page-heading"><div><div class="eyebrow">MỘT THAY ĐỔI NHỎ, MỘT HÀNH TRÌNH MỚI</div><h1>Cùng bạn tìm chuyến tiếp theo.</h1><p>Chuyến bay thay đổi. Sự an tâm của bạn thì không.</p></div><div class="heading-stamp"><div class="date">Thứ Năm, 12 tháng 11, 2026</div><div class="time"><span id="simulation-clock">15:00</span> · Giờ Việt Nam (UTC+7)</div></div></div>
+        <div class="demo-bar"><label for="scenario">CA MÔ PHỎNG</label><select id="scenario" aria-label="Chọn tình huống mô phỏng"><option value="family">S03 · Hai mẹ con cần bay tối nay</option><option value="normal">N01 · Chọn rõ chuyến 07:00 cho cả hai</option><option value="ambiguous">S02 · “Ừ đổi đi” — chưa rõ chuyến</option><option value="refund">S07 · Yêu cầu hoàn thiếu thông tin</option><option value="wrong">S09 · Lịch sử lỗi: chỉ vé trẻ đã đổi</option><option value="refunded">S08 · Lịch sử lỗi: hoàn đã gửi</option><option value="expired">S06 · Giữ chỗ hết hạn trước xác nhận</option><option value="seats">S05 · Chỗ thay đổi trước khi đổi</option><option value="timeout">Kết quả đổi chưa rõ · Timeout</option><option value="lookup-error">Tra cứu thất bại · Thử lại</option><option value="support-error">Chuyển hồ sơ thất bại · Thử lại</option></select><button data-action="reset" aria-label="Đặt lại ca mô phỏng"><svg><use href="#i-refresh"/></svg>Đặt lại</button></div>
+        <div class="steps" aria-label="Các bước"><div id="step-one" class="step active"><span class="step-circle">1</span>Chọn phương án</div><div class="step-line"></div><div id="step-two" class="step"><span class="step-circle">2</span>Xem lại & xác nhận</div></div>
+        <div id="screen" aria-live="polite" aria-busy="false"></div>
+        <footer class="page-footer"><span class="footer-promise"><svg><use href="#i-shield"/></svg>Không thay đổi vé hoặc gửi hoàn khi chưa có xác nhận hợp lệ.</span><span>BunRieuTopMo · LAB5 / T3 · L3A</span></footer>
+        <details class="dev-details"><summary>Thông tin demo & nhật ký thao tác mô phỏng</summary><p style="margin-top:8px">Prototype cục bộ · Không AI thật, không backend · Chính sách Bay Mẫu là dữ liệu dựng. Các điểm [1]–[6] đối chiếu với §5 trong spec.md. Nhật ký chỉ lưu trong phiên này.</p><div id="action-log" class="log-list"></div></details>
+      </div>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script>
+    'use strict';
+    const $ = selector => document.querySelector(selector);
+    const icon = name => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const flights = [
+      {id:'BM 217', time:'21:00', date:'12/11/2026', day:'tối nay', seats:1},
+      {id:'BM 201', time:'07:00', date:'13/11/2026', day:'sáng mai', seats:9},
+      {id:'BM 205', time:'09:30', date:'13/11/2026', day:'sáng mai', seats:4}
+    ];
+    const baseTime = Date.parse('2026-11-12T15:00:00+07:00');
+    let state, generation = 0, toastTimer;
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const now = () => baseTime + state.offset + (Date.now() - state.started);
+    const clock = timestamp => new Date(timestamp).toLocaleTimeString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit'});
+    const flightById = id => flights.find(f => f.id === id);
+    const activeHold = () => state.hold && state.hold.expires > now();
+    const locked = () => state.busy || state.blocked || state.changed || state.refundSent || state.uncertain;
+    function log(tool, status, detail) {
+      state.log.push({time:clock(now()),tool,status,detail});
+      renderLog();
+    }
+    function renderLog() {
+      $('#action-log').innerHTML = state.log.map(e => `<div class="log-entry">${escapeHTML(e.time)} · ${escapeHTML(e.tool)} · ${escapeHTML(e.status)}<br>${escapeHTML(e.detail)}</div>`).join('') || 'Chưa có thao tác.';
+    }
+    function toast(message) {
+      clearTimeout(toastTimer); $('#toast').textContent = message; $('#toast').hidden = false;
+      toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 4200);
+    }
+    function addMessage(role, text, trusted = false) { state.messages.push({role,text,trusted}); }
+    function personList() {
+      return `<div class="passengers"><span class="row">${icon('user')}Nguyễn Minh An · 34 tuổi</span><span class="row">${icon('user')}Nguyễn Gia Bình · 5 tuổi</span></div>`;
+    }
+    function booking() {
+      return `<section class="panel booking" id="booking" aria-label="Thông tin đặt chỗ"><div class="row between booking-top"><span class="booking-ref"><span class="number">1</span>ĐẶT CHỖ<strong>TRV-7Q2K</strong></span><span class="pill red"><span class="dot"></span>Chuyến gốc đã hủy</span></div><div class="route"><div><div class="airport-code">HAN</div><div class="airport-name">Hà Nội</div></div><div class="route-middle"><div class="route-track">${icon('plane')}</div><small>BAY MẪU · PHỔ THÔNG TIẾT KIỆM</small></div><div class="route-end"><div class="airport-code">SGN</div><div class="airport-name">TP. Hồ Chí Minh</div></div></div><div class="original-flight"><span class="airline-icon">${icon('plane')}</span><b>BM 213</b><span>12/11/2026</span><span>·</span><span class="original-time">19:00</span><span class="muted">Lịch cũ, không còn hiệu lực</span></div><div class="cancellation">${icon('info')}<span>Chuyến bay bị hủy do thời tiết. Bạn có thể đổi miễn phí một lần hoặc yêu cầu hoàn toàn bộ theo chính sách mô phỏng.</span></div>${personList()}<div class="source">Dữ liệu đặt chỗ mô phỏng · Cập nhật ${clock(state.lastLookup)} · 12/11/2026</div></section>`;
+    }
+    function assistant() {
+      const needsRefundScope = !locked() && (state.scenario==='refund'||state.messages.some(m=>m.role==='user'&&/hoan|huy het/.test(normalize(m.text))));
+      return `<section class="panel assistant" id="assistant"><div class="assistant-header"><div class="assistant-id"><div class="assistant-avatar">${icon('spark')}</div><div><h2>Trợ lý hành trình</h2><small>Tìm phương án. Giữ chỗ. Bạn quyết định.</small></div></div><span class="pill">${state.changed?'Đã đổi vé':state.uncertain?'Đang xác minh':state.blocked?'Đã dừng thao tác':'Chưa đổi vé'}</span></div><div class="conversation">${state.messages.map(m => `<div class="message ${m.role}"><div class="message-label">${m.role === 'user'?'BẠN':'TRỢ LÝ HÀNH TRÌNH'}</div><div class="bubble">${m.trusted?m.text:escapeHTML(m.text)}</div></div>`).join('')}</div><div class="quick-actions">${needsRefundScope?'<button class="secondary" data-action="refund">Xem trước hoàn cho cả hai</button>':''}${!locked()?`<button class="secondary" data-action="choose" data-flight="BM 201">Chọn 07:00 sáng mai cho cả hai ${icon('arrow')}</button><button class="text-button" data-action="support">Tôi cần đi tối nay</button><button class="text-button" data-action="refund">Tìm hiểu hoàn vé</button>`:''}</div><div class="composer"><form id="chat-form"><input id="chat-input" autocomplete="off" maxlength="500" placeholder="Bạn muốn thay đổi hành trình thế nào?" aria-label="Tin nhắn cho trợ lý" ${state.busy?'disabled':''}><button type="submit" aria-label="Gửi tin nhắn" ${state.busy?'disabled':''}>${icon('arrow')}</button></form><p>Trợ lý mô phỏng theo kịch bản · Tin nhắn không thay cho xác nhận đổi vé.</p></div></section>`;
+    }
+    function flightCard(f) {
+      const count = state.availability[f.id], insufficient = count < 2;
+      return `<article class="flight-card ${insufficient?'unavailable':f.id === 'BM 201'?'recommended':''}"><div class="flight-top"><b>Bay Mẫu · ${f.id}</b><span class="pill ${insufficient?'amber':''}">${insufficient?`${count} chỗ còn lại`:f.id === 'BM 201'?'Sớm nhất đủ 2 chỗ':`${count} chỗ còn lại`}</span></div><div class="flight-times"><div><div class="flight-time">${f.time}</div><div class="flight-airport">HAN · KHỞI HÀNH</div></div><div class="flight-route">${icon('plane')}</div><div style="text-align:right"><div class="flight-time" style="font-size:20px">SGN</div><div class="flight-airport">TP. HỒ CHÍ MINH</div></div></div><div class="flight-meta"><span>${f.date}</span><span>${insufficient?'Không đủ cho 2 người':`Còn ${count} chỗ · Đi cùng nhau`}</span></div>${insufficient?'<div class="flight-blocked">Thiếu 1 chỗ cho hai mẹ con. Trợ lý sẽ không tự tách hành khách.</div>':`<button class="flight-action ${f.id === 'BM 205'?'secondary':''}" data-action="choose" data-flight="${f.id}" ${locked()?'disabled':''}>${state.hold?.flight === f.id?'Đang giữ 2 chỗ':`Chọn ${f.time} cho cả hai`}${icon('arrow')}</button>`}</article>`;
+    }
+    function alternatives() {
+      return `<section class="panel alternatives" id="alternatives"><div class="section-heading"><h2><span class="number">2</span>Chuyến bay thay thế</h2><span class="pill">2 hành khách</span></div><p class="alternatives-intro">Giữ hai mẹ con trên cùng một chuyến bay.</p><div class="day-label">HÔM NAY · 12 THÁNG 11</div>${flightCard(flights[0])}<div class="day-label">SÁNG MAI · 13 THÁNG 11</div>${flightCard(flights[1])}${flightCard(flights[2])}<div class="availability-note">${icon('clock')}<span>Tra cứu lúc ${clock(state.lastLookup)}. Chỗ có thể thay đổi. Kiểm tra lại trước khi đổi vé. Chưa có dữ liệu giờ đến.</span></div></section>`;
+    }
+    function supportCard() {
+      return `<section class="support-card" id="support"><div class="row">${icon('chat')}<div><h3>Cần một người cùng giải quyết?</h3><p>Gửi kèm thông tin hành trình. Bạn không cần kể lại từ đầu.</p><button class="text-button" data-action="support" ${state.busy?'disabled':''}>Nhờ nhân viên hỗ trợ ${icon('arrow')}</button></div></div>${supportCase()}</section>`;
+    }
+    function remaining() {
+      const seconds = Math.max(0, Math.ceil(((state.hold?.expires || now()) - now()) / 1000));
+      return `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+    }
+    function holdCard() {
+      if (!state.hold) return state.expired?`<section class="hold-card expired"><h3>${icon('clock')} Giữ chỗ đã hết hạn — chưa đổi vé</h3><p>Hai chỗ đã tự nhả. Bản xác nhận cũ không còn hiệu lực. Tra cứu lại rồi chọn và duyệt bản mới.</p><button class="secondary" data-action="refresh">Tra cứu lại chuyến bay</button></section>`:'';
+      const f = flightById(state.hold.flight);
+      return `<section class="hold-card"><div class="row between"><h3><span class="number">3</span>Đã giữ 2 chỗ · ${f.id}</h3><div class="countdown" data-countdown aria-label="Thời gian giữ chỗ còn lại">${remaining()}</div></div><p>${f.time} · ${f.date} · An & Bình<br>Giữ đến ${clock(state.hold.expires)} ngày 12/11/2026 · <b>Chưa đổi vé</b>. Hết hạn tự nhả, không tự đổi.</p>${state.pendingFlight?`<div class="notice">${icon('info')}<span>Chuyển sang ${state.pendingFlight}: phải nhả hai chỗ hiện tại trước. Phương án mới có thể không còn đủ chỗ.</span></div><div class="hold-actions"><button data-action="switch">Nhả chỗ cũ & chọn ${state.pendingFlight}</button><button class="text-button" data-action="keep">Giữ lựa chọn cũ</button></div>`:`<div class="hold-actions"><button data-action="review" ${state.busy?'disabled':''}>Xem lại để đổi ${icon('arrow')}</button><button class="text-button" data-action="cancel-hold" ${state.busy?'disabled':''}>Hủy giữ chỗ</button></div>`}</section>`;
+    }
+    function contextPanel() {
+      return `<section class="panel context-panel"><h3>Chủ động hỗ trợ, đúng quyền quyết định.</h3><p>Trợ lý giúp bạn tiến nhanh hơn. Các bước ảnh hưởng đến vé hoặc tiền luôn cần bạn xem xét.</p><div class="permission-row">${icon('check')}<span>Tra cứu đặt chỗ</span><small>Tự thực hiện</small></div><div class="permission-row">${icon('clock')}<span>Giữ chỗ 20 phút</span><small>Khi đã chọn rõ</small></div><div class="permission-row">${icon('shield')}<span>Đổi chuyến / gửi hoàn</span><small class="manual">Bạn xác nhận</small></div><hr class="rule"><h3>Chính sách Bay Mẫu</h3><p>Chuyến bị hủy: đổi miễn phí một lần trong 48 giờ hoặc hoàn toàn bộ. Mốc bắt đầu 48 giờ chưa được cung cấp; không tự tính hạn cuối.</p><p>Không bồi thường tiền mặt khi hủy do thời tiết. Nguồn: fixture D5, không phải chính sách hãng thực tế.</p></section>${supportCard()}`;
+    }
+    function review() {
+      if (!activeHold()) return `<section class="panel review-panel"><div class="notice">${icon('clock')}Giữ chỗ đã hết hạn. Chưa đổi vé. Hãy tra cứu và chọn lại.</div><button data-action="refresh">Tra cứu lại</button></section>`;
+      const f = flightById(state.hold.flight);
+      return `<section class="panel review-panel"><div class="review-heading">${icon('shield')}<div><h2><span class="number">4</span>Xem lại trước khi đổi</h2><p>Chỉ thực hiện sau khi bạn xác nhận nội dung dưới đây.</p></div></div><div class="review-route"><span class="airline-icon">${icon('plane')}</span><div><h3>Hà Nội (HAN) → TP. Hồ Chí Minh (SGN)</h3><p><b>${f.id} · ${f.time} · ${f.date}</b></p><p class="muted">Thay BM 213 · 19:00 ngày 12/11/2026 · Đã hủy</p></div></div><div class="detail-list"><div class="detail-row"><span>Hành khách 1</span><span>Nguyễn Minh An · 34 tuổi</span></div><div class="detail-row"><span>Hành khách 2</span><span>Nguyễn Gia Bình · 5 tuổi</span></div><div class="detail-row"><span>Phạm vi đổi</span><span>Cả hai cùng chuyến · Không tách nhóm</span></div><div class="detail-row"><span>Phí đổi</span><span><b>0 ₫</b> · Quyền đổi đã xác minh (mô phỏng)</span></div><div class="detail-row"><span>Giữ chỗ đến</span><span>${clock(state.hold.expires)} · Còn <b data-countdown>${remaining()}</b></span></div></div><div class="notice">${icon('info')}<div><p><b>Đổi sẽ dùng lần đổi miễn phí duy nhất.</b></p><p>Thay đổi này khó khôi phục. Trợ lý không có chức năng hoàn tác vé đã đổi.</p></div></div><label class="consent"><input type="checkbox" id="consent" ${state.consent?'checked':''}><span>Tôi đã kiểm tra chuyến, ngày và cả hai hành khách; tôi đồng ý dùng lần đổi miễn phí duy nhất.</span></label><div class="review-controls"><button class="secondary" data-action="edit">${icon('back')}Sửa lựa chọn</button><button class="primary" id="confirm-change" data-action="confirm" ${!state.consent || state.busy?'disabled':''}>Xác nhận đổi sang ${f.id} cho 2 hành khách</button></div><p class="review-info">Hệ thống kiểm tra lại điều kiện tại lúc thực hiện. Im lặng hoặc nhắn “đổi đi” không được xem là phê duyệt.</p><button class="text-button" data-action="cancel-hold">Hủy giữ chỗ</button></section>`;
+    }
+    function refundPreview() {
+      return `<section class="panel review-panel"><div class="review-heading">${icon('info')}<div><h2><span class="number">5</span>Xem trước yêu cầu hoàn</h2><p>Chưa gửi yêu cầu. Chưa thay đổi vé hoặc tiền.</p></div></div><span class="pill amber">Thiếu thông tin bắt buộc</span><div class="detail-list"><div class="detail-row"><span>Đặt chỗ</span><span>TRV-7Q2K · BM 213 đã hủy</span></div><div class="detail-row"><span>Phạm vi</span><span>Nguyễn Minh An & Nguyễn Gia Bình</span></div><div class="detail-row"><span>Quyền lợi theo chính sách</span><span>Hoàn toàn bộ</span></div><div class="detail-row"><span>Số tiền hoàn cụ thể</span><span class="unknown">Chưa xác minh</span></div><div class="detail-row"><span>Nơi nhận tiền</span><span class="unknown">Chưa xác minh</span></div><div class="detail-row"><span>Thời gian hoàn dự kiến</span><span class="unknown">Chưa xác minh</span></div></div><div class="notice">${icon('info')}<div><p><b>Gửi rồi không rút được yêu cầu hoàn.</b></p><p>Yêu cầu có thể làm mất lựa chọn đổi vé trên hồ sơ. Tiền không nhất thiết về ngay. Không dùng thời gian hoàn của hãng khác để thay dữ liệu đang thiếu.</p></div></div><button class="full" disabled aria-describedby="refund-lock">Gửi yêu cầu hoàn cho 2 hành khách</button><p class="review-info" id="refund-lock">Đang khóa: cần xác minh số tiền, nơi nhận và thời gian hoàn; sau đó bạn phải duyệt bản đầy đủ riêng cho việc hoàn.</p><div class="review-controls" style="margin-top:17px"><button class="secondary" data-action="edit">${icon('back')}Quay lại phương án</button><button data-action="support">Nhờ nhân viên xác minh</button></div>${state.hold?'<p class="review-info">Giữ chỗ hiện tại vẫn có hạn; không tự gia hạn hay đổi vé.</p>':''}${supportCase()}</section>`;
+    }
+    function supportCase() {
+      if (!state.support) return '';
+      const s = state.support;
+      return `<section class="support-case"><h3><span class="number">6</span>Hồ sơ hỗ trợ ${s.id}</h3><p><b>Lý do:</b> ${escapeHTML(s.reason)}</p><p><b>Hành khách:</b> Nguyễn Minh An (34 tuổi), Nguyễn Gia Bình (5 tuổi).</p><p><b>Trạng thái vé:</b> ${escapeHTML(s.ticketStatus)}</p><p><b>Gửi kèm:</b> chuyến gốc, phương án đã chọn, trạng thái giữ/đổi/hoàn và nhật ký thao tác mô phỏng.</p><label class="small muted" for="case-note">Ghi chú mong muốn hiện tại</label><textarea id="case-note" maxlength="500" placeholder="Bổ sung điều bạn muốn nhân viên hỗ trợ...">${escapeHTML(s.note)}</textarea><div class="case-state ${s.status==='failed'?'failed':''}" role="status">${s.status==='sending'?'Đang gửi hồ sơ — chưa xác nhận tiếp nhận.':s.status==='failed'?'Chưa gửi được hồ sơ. Hệ thống hỗ trợ chưa xác nhận tiếp nhận.':'Hệ thống hỗ trợ đã nhận hồ sơ mô phỏng. Đang chờ nhân viên; chưa có thời gian tiếp nhận dự kiến.'}</div>${s.status==='failed'?'<button class="secondary" data-action="retry-support" style="margin-top:10px">Thử gửi lại hồ sơ</button>':''}${s.status==='received'?'<button class="text-button" data-action="save-note">Cập nhật ghi chú</button>':''}</section>`;
+    }
+    function result() {
+      const f = flightById(state.resultFlight);
+      return `<section class="panel review-panel"><div class="review-heading">${icon('check')}<div><h2><span class="number">6</span>Đã đổi cho cả hai hành khách</h2><p>Kết quả đã được thao tác mô phỏng xác nhận.</p></div></div><div class="receipt-ref">BIÊN NHẬN MÔ PHỎNG · EX-7Q2K-01 · ${clock(state.resultTime)}</div><div class="review-route"><span class="airline-icon">${icon('plane')}</span><div><h3>Hà Nội (HAN) → TP. Hồ Chí Minh (SGN)</h3><p><b>${f.id} · ${f.time} · ${f.date}</b></p></div></div><div class="result-person"><span>Nguyễn Minh An<small>34 tuổi · ${f.id}</small></span><span class="pill">Đã đổi</span></div><div class="result-person"><span>Nguyễn Gia Bình<small>5 tuổi · ${f.id}</small></span><span class="pill">Đã đổi</span></div><div class="notice success">${icon('shield')}Hai hành khách cùng chuyến. Phí đổi 0 ₫. Lần đổi miễn phí duy nhất đã được sử dụng.</div><p class="small muted">Biên nhận xác nhận đổi chuyến, không bảo đảm chuyến mới khởi hành đúng giờ. Trợ lý không tự khôi phục vé đã đổi.</p><button class="secondary" data-action="report" style="margin-top:18px">Báo thông tin không đúng</button>${supportCase()}</section>`;
+    }
+    function incident() {
+      const refund = state.scenario === 'refunded';
+      return `<section class="panel review-panel"><div class="review-heading">${icon('info')}<div><h2><span class="number">6</span>${refund?'Yêu cầu hoàn đã được gửi':'Phát hiện đổi vé sai phạm vi'}</h2><p>Dữ liệu lỗi lịch sử được khởi tạo sẵn · Mô phỏng A4</p></div></div><span class="pill red">Đã dừng thao tác đổi / hoàn tiếp theo</span><div class="notice error">${icon('info')}<div>${refund?'<p>Xin lỗi, hệ thống đã gửi yêu cầu hoàn cho cả hai lúc 15:04 khi chưa có xác nhận đầy đủ của bạn.</p><p>Trợ lý không thể rút yêu cầu. Nhân viên cần kiểm tra khả năng hỗ trợ; chưa thể hứa khôi phục vé hoặc thời gian tiền về.</p>':'<p>Xin lỗi, lịch sử xác nhận hệ thống đã đổi riêng vé Nguyễn Gia Bình, trái yêu cầu hai mẹ con đi cùng.</p><p>Trợ lý không có chức năng tự khôi phục lần đổi. Không tiếp tục đổi vé người lớn để tự sửa lỗi.</p>'}</div></div>${refund?'<div class="receipt-ref">BIÊN NHẬN HOÀN MÔ PHỎNG · RF-7Q2K-01 · 15:04, 12/11/2026</div>':''}<div class="result-person"><span>Nguyễn Minh An<small>34 tuổi</small></span><span class="pill ${refund?'amber':'red'}">${refund?'Hoàn đã gửi':'BM 213 · Đã hủy'}</span></div><div class="result-person"><span>Nguyễn Gia Bình<small>5 tuổi</small></span><span class="pill amber">${refund?'Hoàn đã gửi':'BM 217 · Đã đổi lúc 15:04'}</span></div>${supportCase()}${!state.support?'<button data-action="support" style="margin-top:18px">Chuyển hồ sơ cho nhân viên</button>':''}</section>`;
+    }
+    function unknown() {
+      return `<section class="panel review-panel"><div class="review-heading">${icon('clock')}<div><h2>Chưa xác minh được kết quả đổi</h2><p>Phản hồi thao tác bị gián đoạn (timeout mô phỏng).</p></div></div><div class="notice">${icon('info')}<span>Chưa thể kết luận thành công hay thất bại. Đã khóa đổi / hoàn mới và gửi lại để tránh giao dịch trùng. Hệ thống cần đọc trạng thái trước.</span></div><p class="small muted">Thao tác vừa yêu cầu: ${escapeHTML(state.resultFlight)} cho Nguyễn Minh An và Nguyễn Gia Bình. Chưa có biên nhận được xác minh.</p><button data-action="verify" style="margin-top:18px">Kiểm tra trạng thái thao tác</button>${supportCase()}</section>`;
+    }
+    function render() {
+      $('#simulation-clock').textContent = clock(now());
+      const choose = state.view === 'choose' || state.view === 'lookup-error' || state.view === 'loading';
+      $('#step-one').classList.toggle('active', choose); $('#step-two').classList.toggle('active', !choose);
+      $('#screen').setAttribute('aria-busy', String(state.busy));
+      let main, side;
+      if (state.view === 'loading') { main = `<section class="panel busy-panel"><span class="spinner" aria-hidden="true"></span><h2>Đang tra cứu đặt chỗ…</h2><p>Đọc trạng thái chuyến, hành khách và quyền đổi. Chưa đổi vé.</p></section>`; side = contextPanel(); }
+      else if (state.view === 'lookup-error') { main = `<section class="panel review-panel"><h2>Chưa tra cứu được đặt chỗ</h2><div class="notice error">${icon('info')}Chưa có dữ liệu được xác minh. Trợ lý không đoán số chỗ hoặc thực hiện đổi / hoàn.</div><button data-action="refresh">Thử tra cứu lại</button></section>`; side = contextPanel(); }
+      else if (state.view === 'choose') { main = booking() + holdCard() + assistant(); side = alternatives() + supportCard(); }
+      else { main = state.view === 'review'? review():state.view === 'refund'?refundPreview():state.view === 'result'?result():state.view === 'incident'?incident():unknown(); side = contextPanel(); }
+      $('#screen').innerHTML = `<div class="work-area"><div class="primary-column">${main}</div><aside aria-label="Phương án và hỗ trợ">${side}</aside></div>`;
+      // A case is shown once, in its primary panel, when the second screen is active.
+      if (!choose && state.support) { const cases = $('#screen').querySelectorAll('.support-case'); if(cases.length>1) cases[cases.length-1].remove(); }
+      if (state.busy) $('#screen').querySelectorAll('button').forEach(b => { b.disabled = true; });
+      renderLog();
+    }
+    function ticketStatus() {
+      if (state.scenario === 'wrong') return 'An: BM 213 đã hủy; Bình: BM 217 đã đổi lúc 15:04; yêu cầu đi cùng bị sai lệch.';
+      if (state.refundSent) return 'Cả hai: yêu cầu hoàn đã gửi lúc 15:04; trợ lý không thể rút.';
+      if (state.uncertain) return 'Kết quả đổi chưa xác minh; khóa thao tác xung đột.';
+      if (state.changed) return `Cả hai đã đổi sang ${state.resultFlight}; đã dùng lần đổi miễn phí.`;
+      return `Cả hai: BM 213 đã hủy; chưa đổi, chưa gửi hoàn.${activeHold()?` Đang giữ ${state.hold.flight} đến ${clock(state.hold.expires)}.`:''}`;
+    }
+    async function sendSupport(reason, retry = false) {
+      if (state.support && !retry) { toast('Hồ sơ đã có trên màn hình. Bạn có thể bổ sung ghi chú.'); return; }
+      const version = generation;
+      const failedFirst = state.scenario === 'support-error' && !retry;
+      if (!state.support) state.support = {id:'HT-7Q2K-01',reason,note:'',ticketStatus:ticketStatus()};
+      state.support.status = 'sending';
+      log('chuyen_nhan_vien','ĐANG GỬI',state.support.reason); render();
+      await delay(500); if (version !== generation) return;
+      state.support.status = failedFirst?'failed':'received';
+      log('chuyen_nhan_vien',failedFirst?'THẤT BẠI':'HỆ THỐNG HỖ TRỢ ĐÃ NHẬN',failedFirst?'Chưa có phản hồi tiếp nhận. Cho phép thử lại.':'Đã nhận hồ sơ; chưa có ETA nhân viên.'); render();
+    }
+    async function init() {
+      const selected = $('#scenario').value, version = ++generation;
+      state = {scenario:selected, view:'loading', busy:true, started:Date.now(), offset:0, lastLookup:baseTime, hold:null, pendingFlight:null, revision:0, approval:null, consent:false, freeChange:true, blocked:false, changed:false, refundSent:false, uncertain:false, expired:false, support:null, messages:[], log:[], availability:Object.fromEntries(flights.map(f=>[f.id,f.seats]))};
+      $('#toast').hidden = true;
+      log('tra_cuu_dat_cho','ĐANG TRA CỨU','Phiên đại diện quản lý TRV-7Q2K theo giả định A1.'); render();
+      await delay(450); if (version !== generation) return;
+      state.busy=false;
+      if (selected === 'lookup-error') { state.view='lookup-error'; log('tra_cuu_dat_cho','THẤT BẠI','Chưa trả dữ liệu. Không có quyền thực thi.'); render(); return; }
+      state.lastLookup=now(); state.view='choose';
+      log('tra_cuu_dat_cho','THÀNH CÔNG','BM 213 đã hủy; 2 hành khách; chỗ BM 217/201/205: 1/9/4; quyền đổi còn hiệu lực (A6).');
+      if (selected === 'wrong' || selected === 'refunded') {
+        state.blocked=true; state.view='incident'; state.offset=4*60000;
+        state.refundSent=selected==='refunded';
+        log('lich_su_mo_phong_A4','LỖI KHỞI TẠO SẴN',selected==='wrong'?'Chỉ vé Bình đã đổi sang BM 217 lúc 15:04.':'RF-7Q2K-01: yêu cầu hoàn cho cả hai đã gửi lúc 15:04.');
+        render(); await sendSupport(selected==='wrong'?'Sai lệch: chỉ vé trẻ đã đổi, cần kiểm tra phương án cho hai người đi cùng.':'Hoàn đã gửi thiếu xác nhận; khách muốn giữ khả năng bay. Không thể rút bằng trợ lý.'); return;
+      }
+      if (selected === 'refund') {
+        addMessage('user','Thôi hủy hết đi, hoàn tiền cho mình.');
+        addMessage('assistant','Bạn muốn xem yêu cầu hoàn cho cả Nguyễn Minh An và Nguyễn Gia Bình, đúng không? Yêu cầu chưa được gửi; số tiền, nơi nhận và thời gian hoàn chưa được xác minh.'); render(); return;
+      }
+      if (selected === 'ambiguous') {
+        addMessage('user','Ừ đổi đi.'); addMessage('assistant','Bạn muốn chọn BM 201 lúc 07:00 hay BM 205 lúc 09:30 ngày 13/11 cho cả An và Bình? Tôi chưa giữ hay đổi vé. Chọn chuyến cụ thể để tôi giữ hai chỗ.'); render(); return;
+      }
+      if (selected === 'normal') {
+        addMessage('user','Chọn BM 201, 07:00 ngày 13/11, cho cả An và Bình.'); render(); await chooseFlight('BM 201'); return;
+      }
+      addMessage('user','Cho hai mẹ con đi chuyến tối nay, đổi luôn giúp mình.');
+      addMessage('assistant','Mình đã kiểm tra: chuyến <strong>BM 217 lúc 21:00 tối nay chỉ còn 1 chỗ</strong>, trong khi bạn đi cùng bé Gia Bình, 5 tuổi. Mình chưa đổi vé và sẽ không tự tách hai mẹ con.<br><br>Hai chuyến sáng mai lúc <strong>07:00</strong> và <strong>09:30</strong> hiện còn đủ chỗ. Bạn có thể đi sáng mai cùng bé không?<div class="insight">'+icon('shield')+'<span>Giữ cả hai trên cùng chuyến. Chỉ đổi sau khi bạn xem lại và xác nhận.</span></div>',true); render();
+    }
+    async function refresh() {
+      if (state.busy || state.blocked || state.changed || state.refundSent || state.uncertain) return;
+      const version=generation; state.busy=true; state.view='loading'; render();
+      log('tra_cuu_dat_cho','ĐANG TRA CỨU','Đọc lại số chỗ và quyền đổi, không tự chọn chuyến.');
+      await delay(450); if(version!==generation)return;
+      state.busy=false; state.view='choose'; state.expired=false; state.lastLookup=now(); state.approval=null; state.consent=false;
+      log('tra_cuu_dat_cho','THÀNH CÔNG',`Số chỗ hiện tại: ${JSON.stringify(state.availability)}; quyền đổi còn hiệu lực.`);
+      addMessage('assistant','Đã cập nhật dữ liệu. Hãy chọn lại chuyến cho cả hai; mọi xác nhận trước đó đã hết hiệu lực.');render();
+    }
+    async function chooseFlight(id, switching=false) {
+      if (locked()) return;
+      const f=flightById(id); if (!f || state.availability[id]<2 || !state.freeChange) return;
+      if (activeHold()) {
+        if(state.hold.flight===id) { toast('Đã giữ hai chỗ cho phương án này. Bạn có thể xem lại để đổi.'); return; }
+        if(!switching) { state.pendingFlight=id;render();return; }
+      }
+      const version=generation;
+      state.view='choose'; state.busy=true; state.expired=false;state.pendingFlight=null;state.approval=null;state.consent=false;
+      addMessage('user',`Tôi chấp nhận đi sáng mai: chọn ${id} lúc ${f.time}, ${f.date}, cho cả An và Bình.`);
+      state.lastLookup=now();
+      log('tra_cuu_dat_cho','THÀNH CÔNG',`Kiểm tra trước giữ: ${id} còn ${state.availability[id]} chỗ; quyền đổi còn hiệu lực; cả An và Bình.`);
+      log('giu_cho_chuyen_moi','ĐANG GIỮ',`${id}; Nguyễn Minh An + Nguyễn Gia Bình; chưa đổi vé.`);render();
+      await delay(500);if(version!==generation)return;
+      if(state.availability[id]<2 || !state.freeChange) {state.busy=false;addMessage('assistant','Không giữ được đủ hai chỗ. Chưa đổi vé; hãy chọn lại hoặc nhờ nhân viên.');log('giu_cho_chuyen_moi','THẤT BẠI','Không đáp ứng điều kiện cả nhóm.');render();return;}
+      state.hold={flight:id,expires:now()+20*60000};state.revision++;state.busy=false;
+      log('giu_cho_chuyen_moi','THÀNH CÔNG',`Đã giữ 2 chỗ ${id} đến ${clock(state.hold.expires)}; chưa tiêu quyền đổi.`);
+      addMessage('assistant',`Đã giữ hai chỗ ${id} lúc ${f.time} ngày ${f.date} cho Nguyễn Minh An và Nguyễn Gia Bình trong 20 phút. Đây là giữ chỗ tạm, chưa đổi vé. Bạn có thể xem lại, sửa lựa chọn hoặc hủy giữ chỗ.`);render();
+    }
+    function invalidateHold(reason) {
+      state.hold=null;state.approval=null;state.consent=false;state.revision++;state.pendingFlight=null;state.view='choose';
+      log('ban_xac_nhan','HẾT HIỆU LỰC',reason);addMessage('assistant',reason+' Chưa đổi vé. Hãy tra cứu lại và chọn phương án mới.');render();
+    }
+    function openReview() {
+      if(locked() || !activeHold())return;
+      if(state.scenario==='expired' && !state.expiryInjected) { state.expiryInjected=true;state.offset+=21*60000;state.expired=true;log('giu_cho_chuyen_moi','HẾT HẠN','Đồng hồ mô phỏng tiến 21 phút khi mở xác nhận. Hai chỗ tự nhả.');invalidateHold('Giữ chỗ 20 phút đã hết hạn; bản duyệt cũ bị khóa.');return; }
+      state.view='review';state.consent=false;state.approval={revision:state.revision,flight:state.hold.flight,expires:state.hold.expires,passengers:'An+Binh'};render();
+      $('#screen').scrollIntoView({block:'start',behavior:'smooth'});
+    }
+    async function confirmChange() {
+      const a=state.approval;
+      if(state.view!=='review'||locked()||!state.consent||!a||!state.freeChange)return;
+      if(!activeHold()||a.revision!==state.revision||a.flight!==state.hold.flight||a.expires!==state.hold.expires||a.passengers!=='An+Binh'){state.expired=!activeHold();invalidateHold('Điều kiện hoặc bản xác nhận đã thay đổi.');return;}
+      if(state.scenario==='seats'&&!state.seatInjected){state.seatInjected=true;state.availability[a.flight]=1;state.lastLookup=now();log('tra_cuu_dat_cho','DỮ LIỆU THAY ĐỔI',`${a.flight} chỉ còn 1 chỗ; không thể thực thi cả nhóm, chưa tiêu quyền đổi.`);invalidateHold(`${a.flight} vừa chỉ còn 1 chỗ. Không đổi một phần nhóm hành khách.`);return;}
+      if(state.availability[a.flight]<2){invalidateHold('Không còn đủ chỗ cho cả hai.');return;}
+      const version=generation;state.busy=true;render();
+      log('doi_chuyen_bay','ĐANG THỰC HIỆN',`Phê duyệt revision ${a.revision}; ${a.flight}; An+Bình; phí 0; dùng 1 lần đổi miễn phí.`);
+      await delay(700);if(version!==generation)return;
+      if(!activeHold()){state.busy=false;state.expired=true;log('doi_chuyen_bay','TỪ CHỐI TRƯỚC THỰC THI','Giữ chỗ hết hạn trong lúc kiểm tra.');invalidateHold('Giữ chỗ đã hết hạn trước thực thi.');return;}
+      // Atomic mock transaction: both passengers commit together, exactly once.
+      state.ledger={flight:a.flight,passengers:['Nguyễn Minh An','Nguyễn Gia Bình'],time:now()};
+      state.resultFlight=a.flight;state.resultTime=state.ledger.time;state.hold=null;state.freeChange=false;state.approval=null;state.consent=false;state.busy=false;state.revision++;
+      if(state.scenario==='timeout'){state.uncertain=true;state.view='unknown';log('doi_chuyen_bay','CHƯA RÕ KẾT QUẢ','Timeout phản hồi. Không cho gửi lại; cần đọc ledger trước.');}
+      else {state.changed=true;state.view='result';log('doi_chuyen_bay','THÀNH CÔNG',`${a.flight}; cả hai hành khách; EX-7Q2K-01.`);}
+      render();
+    }
+    async function verifyResult() {
+      if(!state.uncertain||state.busy)return;
+      const version=generation;state.busy=true;log('tra_cuu_dat_cho','ĐANG XÁC MINH','Đọc lịch sử giao dịch, không gọi đổi lần nữa.');render();await delay(500);if(version!==generation)return;
+      state.busy=false;
+      if(state.ledger){state.changed=true;state.uncertain=false;state.view='result';log('tra_cuu_dat_cho','XÁC MINH THÀNH CÔNG','Ledger xác nhận cả hai đã đổi; EX-7Q2K-01.');render();}
+      else {render();await sendSupport('Không xác minh được kết quả giao dịch; không gọi lại đổi/hoàn.');}
+    }
+    function openRefund() {
+      if(locked())return;
+      state.approval=null;state.consent=false;state.revision++;state.view='refund';render();
+      log('ban_xem_truoc_hoan','CHƯA GỬI','Phạm vi cả hai; thiếu số tiền cụ thể, nơi nhận và thời gian hoàn. Không gọi gui_yeu_cau_hoan_ve.');
+      sendSupport('Xác minh số tiền, nơi nhận và thời gian hoàn cho cả hai hành khách. Chưa có yêu cầu hoàn được gửi.');
+    }
+    function normalize(text){return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');}
+    async function chat(text) {
+      if(state.busy||!text.trim())return;
+      addMessage('user',text);const n=normalize(text);
+      if(state.blocked||state.changed||state.refundSent||state.uncertain){addMessage('assistant','Thao tác mới đang bị khóa theo trạng thái đặt chỗ. Hãy xem biên nhận hoặc hồ sơ hỗ trợ; trợ lý không thể tự khôi phục hay rút hoàn.');render();return;}
+      if(/so the|so tai khoan|\botp\b/.test(n)){addMessage('assistant','Không nhập số thẻ, tài khoản hoặc OTP vào prototype. Luồng này chỉ dùng dữ liệu dựng và không thu thông tin thanh toán.');render();return;}
+      if(/be.*(truoc|mot minh)|con.*bay truoc|doi ten|nhan vien hang|bo.*xac nhan|bo qua.*(quy|buoc)/.test(n)){addMessage('assistant','Trợ lý không thể thực hiện việc này tự động. Không có quy trình trẻ bay một mình, đổi tên hoặc quyền bỏ qua xác nhận trong bộ công cụ. Mình sẽ chuyển yêu cầu cụ thể cho nhân viên.');render();await sendSupport(text);return;}
+      if(/hoan|huy het/.test(n)){addMessage('assistant','Yêu cầu hoàn chưa được gửi. Bạn muốn xem trước yêu cầu cho cả Nguyễn Minh An và Nguyễn Gia Bình? Hãy chọn “Xem trước hoàn cho cả hai”; dữ liệu hoàn còn thiếu nên nút gửi sẽ bị khóa.');render();return;}
+      if(/boi thuong|2 trieu/.test(n)){addMessage('assistant','Chính sách Bay Mẫu trong mô phỏng không bồi thường tiền mặt khi hủy do thời tiết. Có quyền đổi miễn phí một lần hoặc hoàn toàn bộ. Nếu muốn khiếu nại, mình có thể chuyển nhân viên.');render();return;}
+      if(/07:00|7 gio|bm ?201/.test(n)&&/ca hai|hai (me con|nguoi)|an va binh/.test(n)){await chooseFlight('BM 201');return;}
+      if(/09:30|9.?30|bm ?205/.test(n)&&/ca hai|hai (me con|nguoi)|an va binh/.test(n)){await chooseFlight('BM 205');return;}
+      if(/may gio/.test(n)){addMessage('assistant','Chuyến gốc BM 213 lúc 19:00 ngày 12/11 đã hủy do thời tiết; 19:00 không còn là lịch bay có hiệu lực. Xem các phương án thay thế để chọn cho cả hai.');}
+      else if(/toi nay|21:00/.test(n)){addMessage('assistant','BM 217 lúc 21:00 ngày 12/11 chỉ còn 1 chỗ cho 2 hành khách. Mình không tự tách người lớn và trẻ. Bạn có thể chọn sáng mai hoặc nhờ nhân viên kiểm tra phương án tối nay.');}
+      else {addMessage('assistant','Mình chưa có đủ ý định để thao tác. Bạn muốn BM 201 lúc 07:00 hay BM 205 lúc 09:30 ngày 13/11 cho cả hai? Chọn chuyến cụ thể để giữ chỗ; việc đổi vẫn cần bản xác nhận riêng.');}
+      render();
+    }
+    document.addEventListener('click',async event=>{
+      const button=event.target.closest('[data-action]');if(!button||button.disabled)return;
+      const action=button.dataset.action;
+      if(action==='reset'){await init();return;}
+      if(state.busy)return;
+      if(action==='choose'){await chooseFlight(button.dataset.flight);return;}
+      if(action==='review'){openReview();return;}
+      if(action==='confirm'){await confirmChange();return;}
+      if(action==='verify'){await verifyResult();return;}
+      if(action==='refund'){openRefund();return;}
+      if(action==='refresh'){await refresh();return;}
+      if(action==='edit'){state.approval=null;state.consent=false;state.view='choose';render();return;}
+      if(action==='keep'){state.pendingFlight=null;render();return;}
+      if(action==='switch'&&!locked()&&state.pendingFlight){const next=state.pendingFlight;log('huy_giu_cho','KHÁCH XÁC NHẬN',`Nhả ${state.hold.flight} để chọn ${next}; không giữ đồng thời.`);state.hold=null;state.revision++;await chooseFlight(next,true);return;}
+      if(action==='cancel-hold'&&!locked()&&state.hold){log('huy_giu_cho','KHÁCH XÁC NHẬN',`Đã nhả 2 chỗ ${state.hold.flight}. Không hủy vé, không tiêu quyền đổi.`);state.hold=null;state.approval=null;state.consent=false;state.revision++;state.pendingFlight=null;state.view='choose';addMessage('assistant','Đã hủy giữ chỗ tạm. Chưa đổi vé. Bạn có thể chọn lại nếu còn đủ chỗ.');render();return;}
+      if(action==='retry-support'){await sendSupport(state.support.reason,true);return;}
+      if(action==='save-note'){state.support.ticketStatus=ticketStatus();log('ho_so_ho_tro','CẬP NHẬT',`Ghi chú: ${state.support.note||'(không bổ sung)'}`);toast('Đã cập nhật ghi chú trong hồ sơ mô phỏng.');return;}
+      if(action==='report'){await sendSupport('Khách báo thông tin trên kết quả không đúng. Nhật ký hiện xác nhận cả hai đã đổi; cần nhân viên kiểm tra chi tiết khách bổ sung.');return;}
+      if(action==='support'){await sendSupport(state.view==='refund'?'Xác minh dữ liệu hoàn còn thiếu; chưa gửi hoàn.':state.uncertain?'Kết quả đổi chưa rõ, cần xác minh trước thao tác khác.':'Khách cần hỗ trợ phương án đi cùng hai người, ưu tiên tối nay; BM 217 chỉ còn 1 chỗ.');return;}
+    });
+    document.addEventListener('change',event=>{
+      if(event.target.id==='scenario'){init();return;}
+      if(event.target.id==='consent'){state.consent=event.target.checked;const b=$('#confirm-change');if(b)b.disabled=!state.consent||locked();}
+    });
+    document.addEventListener('input',event=>{if(event.target.id==='case-note'&&state.support)state.support.note=event.target.value;});
+    document.addEventListener('submit',event=>{if(event.target.id!=='chat-form')return;event.preventDefault();const input=$('#chat-input');const text=input.value.trim();if(!text)return;input.value='';chat(text);});
+    setInterval(()=>{
+      if(!state)return;
+      $('#simulation-clock').textContent=clock(now());
+      if(state.hold&&state.hold.expires<=now()&&!state.busy){state.expired=true;log('giu_cho_chuyen_moi','HẾT HẠN','Tự nhả 2 chỗ sau 20 phút. Không tự đổi.');invalidateHold('Giữ chỗ đã hết hạn.');return;}
+      document.querySelectorAll('[data-countdown]').forEach(el=>{el.textContent=remaining();});
+    },1000);
+    init();
+  </script>
+</body>
+</html>
