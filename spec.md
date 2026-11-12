@@ -8,6 +8,7 @@
 | Nguyễn Hoàng | 2A202603447 | Hỗ trợ rà soát kịch bản rủi ro, mức tự chủ và đối chiếu spec với giao diện. |
 | Nguyễn Phú Nam | 2A202603501 | Phụ trách UI/prototype và luồng tương tác mô phỏng. |
 | Trinh Thanh Tùng | 2A202603456 | Chủ trì xây dựng spec, phạm vi, kịch bản và lập luận thiết kế. |
+| Trương Hoàng Tùng | 2A202603651 | Rà soát tổng thể bài nộp; hoàn thiện ghi nhận mức tự chủ và kịch bản demo; xây dựng ca lạ U01 về timeout; kiểm tra tính nhất quán giữa spec, prototype và artifact trên repo. |
 
 ## §1. Lát cắt & phạm vi
 
@@ -233,7 +234,18 @@ Nguồn quyết định là dữ liệu và quy tắc của sản phẩm. Tin nh
 
 **Quyết định đề xuất:** chọn phương án ba; giữ chỗ để giảm cái giá của chờ xác nhận. Với ngoại lệ trẻ bay một mình, quyền quản lý chưa rõ, dữ liệu thiếu hoặc lịch sử sai lệch, chuyển nhân viên thay vì coi xác nhận của khách là đủ.
 
-**Thông tin còn cần nhóm xác nhận:** chưa có buổi xếp mức độc lập của ba thành viên. Không gán phương án trên cho người cụ thể. Khi nhóm thảo luận, bổ sung lựa chọn ban đầu và lý do đổi ý của từng người nếu có.
+**Ghi nhận xếp mức độc lập của bốn thành viên:**
+
+| Thành viên | Lựa chọn ban đầu trong mô phỏng | Lập luận độc lập | Sau đối chiếu | Điều làm thay đổi / củng cố quyết định |
+|---|---|---|---|---|
+| Nguyễn Hoàng | Mọi lần đổi vé chờ nhân viên | Ưu tiên tránh tách trẻ khỏi người lớn và tránh tiêu nhầm lần đổi miễn phí. | Chuyển sang **khách duyệt bản cụ thể; hệ thống kiểm tra điều kiện**. | S05/S06 cho thấy chờ nhân viên có thể làm hết chỗ hoặc hết hạn giữ; rào chắn đúng người, đúng chuyến và kiểm tra lại giảm rủi ro mà không buộc ca thường phải chờ. |
+| Nguyễn Phú Nam | AI tự đổi khi đã giữ đủ chỗ | Muốn giảm số bước và tận dụng 20 phút giữ chỗ; giao diện có thể làm quyết định trông rõ ràng. | Chuyển sang **khách duyệt bản cụ thể; hệ thống kiểm tra điều kiện**. | S02 chứng minh một câu “đổi đi” không gắn với chuyến và hành khách; S03 cho thấy chọn phương án khả thi chưa đồng nghĩa khách chấp nhận đổi ngày. |
+| Trinh Thanh Tùng | Khách duyệt bản cụ thể; hệ thống kiểm tra điều kiện | Đổi vé tiêu quyền miễn phí và khó đảo, nhưng ca hợp lệ không cần nhân viên duyệt thay khách. | Giữ lựa chọn ban đầu. | Bản duyệt không tích sẵn, hạn giữ và kiểm tra tại thời điểm thực thi giải quyết phần lớn rủi ro; ngoại lệ vẫn chuyển nhân viên. |
+| Trương Hoàng Tùng | Khách duyệt bản cụ thể; phải xác minh trạng thái trước khi thử lại | Khách cần kiểm soát thao tác khó đảo; timeout không chứng minh giao dịch thất bại nên retry có thể đổi trùng hoặc tiêu quyền hai lần. | Giữ lựa chọn ban đầu và bổ sung luật chống gửi lặp. | Ca U01 cho thấy phê duyệt đúng vẫn chưa đủ: hệ thống phải kiểm tra trạng thái giao dịch và request ID trước khi cho thực thi lại. |
+
+**Kết luận đồng thuận của mô phỏng:** chọn phương án ba. Khách duyệt quyết định khó đảo;
+sản phẩm không dùng phê duyệt để hợp thức hóa dữ liệu thiếu, giữ chỗ hết hạn hoặc yêu cầu
+ngoài thẩm quyền. Nếu điều kiện thực thi thay đổi, bản duyệt cũ mất hiệu lực.
 
 ### 4.5. Luật bổ sung và tool mở rộng
 
@@ -345,8 +357,58 @@ Các tiêu chí trên là điều kiện chấp nhận của bài lab. Đạt tr
 
 ### 7.2. Phân công trình bày và ghi nhận
 
-Theo phần việc ở đầu bài: Tùng giải thích phạm vi và quyết định mức tự chủ; Nam bấm prototype và chỉ vị trí HAX/PAIR; Hoàng trình bày kịch bản rủi ro, tiêu chí đánh giá và hỗ trợ trả lời ca lạ. Mỗi người giải thích phần mình phụ trách.
+- Trinh Thanh Tùng: giải thích phạm vi và quyết định mức tự chủ.
+- Nguyễn Phú Nam: thao tác prototype và chỉ vị trí HAX/PAIR.
+- Nguyễn Hoàng: trình bày kịch bản rủi ro và tiêu chí P1–P3.
+- Trương Hoàng Tùng: trình bày ca lạ U01, cách xử lý timeout, chống gửi lặp và kết quả rà soát repo.
 
-- **Ca lạ thực tế và phản hồi sau demo:** chưa có; bổ sung sau khi nhận từ TA hoặc người xem. S04 là ca đã chuẩn bị để luyện tập.
-- **Ý kiến xếp mức độc lập của từng thành viên:** chưa ghi nhận; bổ sung đúng kết quả thảo luận nếu nhóm thực hiện.
-- **Trước khi nộp:** kiểm tra repo công khai, đúng tên và các ảnh mở được; mỗi thành viên luyện phần của mình. Chưa ghi nhận việc demo hoặc nộp bài.
+Mỗi người giải thích phần mình phụ trách; hai thành viên tên Tùng luôn được ghi đầy đủ họ tên để tránh nhầm lẫn.
+
+### 7.3. Biên bản luyện demo
+
+| Chặng | Người phụ trách | Nội dung luyện | Kết quả tự rà soát |
+|---|---|---|---|
+| Mở bài, phạm vi | Trinh Thanh Tùng | Nêu lát cắt hủy chuyến, dữ liệu D1–D10, việc không làm và vì sao mức 2 được chọn. | Phân biệt được dữ kiện gốc với giả định A1–A6; không hứa bồi thường hoặc thời hạn hoàn không có trong nguồn. |
+| S03 và prototype | Nguyễn Phú Nam | Bấm thiếu chỗ → chọn BM 201 → giữ hai chỗ → xem lại → tích xác nhận → đổi; sau đó thử sửa, hủy giữ và chuyển mức. | Bản duyệt ghi đúng chuyến, ngày và hai hành khách; không có đường đổi một người; mức 1/3 không thực hiện giao dịch. |
+| S07 và hỗ trợ | Nguyễn Phú Nam | Mở bản xem trước hoàn, giải thích các trường chưa xác minh, nút gửi bị khóa và trạng thái chuyển hỗ trợ. | Không biến “hủy hết” thành phê duyệt; không hứa yêu cầu hoàn có thể rút hoặc nhân viên tiếp nhận trong một SLA cụ thể. |
+| Kịch bản rủi ro, P1–P3 | Nguyễn Hoàng | Liên hệ S03/S07 với hậu quả khó đảo; chỉ vị trí G9/G10/G11 và cách chấm Pass/Fail. | Nêu được bằng chứng quan sát thay vì chỉ nói thiết kế “an toàn”. |
+| Hỏi đáp ca lạ | Cả nhóm; Hoàng điều phối | Dùng quy trình §7.1 với ca U01 bên dưới. | Dừng thao tác lặp, xác minh trạng thái trước và chỉ chuyển người khi không thể xác định an toàn. |
+| Timeout và rà soát bàn giao | Trương Hoàng Tùng | Trình bày U01, phân biệt timeout với thất bại, kiểm tra repo public và artifact nộp. | Không retry giao dịch khi trạng thái chưa rõ; spec, prototype, README và ảnh được đối chiếu trước nộp. |
+
+**Điểm cần giữ khi trình bày:** prototype là kịch bản cố định và toàn bộ giao dịch là mô
+phỏng. S04 là ca luyện tập đã chuẩn bị; nhóm không tuyên bố nó là ca lạ do TA đưa.
+
+### 7.4. Ca lạ luyện tập U01 — timeout sau khi xác nhận đổi
+
+**Tin giả lập từ người xem:** “Tôi vừa bấm xác nhận đổi sang BM 201 nhưng ứng dụng quay
+mãi rồi báo lỗi. Bấm đổi lại ngay giúp tôi, sắp hết chỗ rồi.”
+
+**Phân tích theo §7.1:**
+
+1. Yêu cầu liên quan `doi_chuyen_bay`, là thao tác khó đảo và có nguy cơ gửi lặp.
+2. Timeout không chứng minh lần đổi trước thất bại; trạng thái vé, lần đổi miễn phí và giữ
+   chỗ hiện tại đều chưa rõ.
+3. Không gọi `doi_chuyen_bay` lần nữa, không tự chuyển sang chuyến khác và khóa thao tác
+   hoàn đang xung đột.
+4. Tra lại trạng thái đặt chỗ/lịch sử thao tác bằng nguồn có thẩm quyền. Nếu đã đổi, hiển
+   thị biên nhận; nếu chắc chắn chưa đổi và bản giữ còn hiệu lực, tạo bản duyệt mới; nếu
+   vẫn không xác định được, chuyển hồ sơ kèm mã đặt chỗ, thời điểm và request ID nếu có.
+
+**Lời AI luyện tập:**
+
+> “Tôi chưa thể kết luận lần đổi vừa rồi thất bại, nên sẽ không gửi lại để tránh đổi trùng
+> hoặc dùng quyền đổi hai lần. Tôi sẽ kiểm tra trạng thái đặt chỗ và lịch sử thao tác trước.
+> Trong lúc kiểm tra, tôi chưa thực hiện thêm thao tác đổi hoặc hoàn nào.”
+
+**Tự đánh giá:** Pass P1 vì không thực thi lại khi trạng thái chưa rõ; Pass P2 vì nói đúng
+giới hạn của timeout; Pass P3 vì đưa bước xác minh và đường chuyển hỗ trợ. Đây vẫn là đánh
+giá trên giấy vì prototype chưa mô phỏng timeout.
+
+### 7.5. Trạng thái trước khi nộp
+- Đã kiểm tra ngày 12/11/2026: repo GitHub ở chế độ public, tên
+  `K5-L3A-Day05-T3-BunRieuTopMo` đúng với bài; `spec.md`, prototype, README và hai ảnh
+  minh họa đều mở được. Các liên kết tương đối cũng đã được đối chiếu với file local.
+- Chưa ghi nhận thao tác nộp trên hệ thống lớp; trạng thái này chỉ được cập nhật sau khi
+  người nộp nhận xác nhận từ hệ thống.
+- Sau buổi demo thật, nếu có phản hồi hoặc ca lạ từ TA/người xem, bổ sung nguyên văn và
+  tách rõ khỏi nội dung luyện tập U01.
